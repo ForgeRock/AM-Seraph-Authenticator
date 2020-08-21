@@ -36,10 +36,10 @@ The next steps will differ depending on whether the authenticator is being deplo
     <param-value>http://openam.example.com:8080/openam?goto=${originalurl}</param-value>
     
     <param-name>link.login.url</param-name>
-    <param-value>http://openam.partner.com:8080/openam?goto=${originalurl}</param-value>
+    <param-value>http://openam.example.com:8080/openam?goto=${originalurl}</param-value>
 
     <param-name>logout.url</param-name>
-    <param-value>http://openam.partner.com:8080/openam/XUI/?goto={{URL_Encoded_Value_Of_Jira_URL}}#logout</param-value>
+    <param-value>http://openam.example.com:8080/openam/XUI/?goto={{URL_Encoded_Value_Of_Jira_URL}}#logout</param-value>
     ```
   * Disable the default authenticator in use by Jira by commenting out the following line :
     ```
@@ -77,7 +77,7 @@ The next steps will differ depending on whether the authenticator is being deplo
     <param-value>http://openam.example.com:8080/openam?goto=${originalurl}</param-value>
     
     <param-name>link.login.url</param-name>
-    <param-value>http://openam.partner.com:8080/openam?goto=${originalurl}</param-value>
+    <param-value>http://openam.example.com:8080/openam?goto=${originalurl}</param-value>
     ```
   * Disable the default authenticator in use by Confluence by commenting out the following line:
     ```
@@ -93,7 +93,7 @@ The next steps will differ depending on whether the authenticator is being deplo
     <action name="logout" class="com.atlassian.confluence.user.actions.LogoutAction">
         <interceptor-ref name="defaultStack"/>
         <result name="error" type="velocity">/logout.vm</result>
-        <result name="success" type="redirect">http://openam.partner.com:8080/openam/XUI/?goto={{URL_Encoded_Value_Of_Post_Logout_URL}}#logout</result>
+        <result name="success" type="redirect">http://openam.example.com:8080/openam/XUI/?goto={{URL_Encoded_Value_Of_Post_Logout_URL}}#logout</result>
     </action>
     ```
  5\. Restart Jira for the changes to take effect.
