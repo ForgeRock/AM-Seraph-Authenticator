@@ -1,6 +1,6 @@
 # AM-Seraph-Authenticator
 
-The AM Seraph Authenticator enables Single Sign on (SSO) and Single Logout (SLO) with ForgeRock Access Management
+The AM Seraph Authenticator enables Single Sign On (SSO) and Single Logout (SLO) with ForgeRock Access Management
  for Atlassian Jira and Confluence.
  
 ## Usage
