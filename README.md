@@ -96,5 +96,5 @@ The next steps will differ depending on whether the authenticator is being deplo
         <result name="success" type="redirect">http://openam.example.com:8080/openam/XUI/?goto={{URL_Encoded_Value_Of_Post_Logout_URL}}#logout</result>
     </action>
     ```
- 5\. Restart Jira for the changes to take effect.
+ 5\. Restart Confluence for the changes to take effect.
    
