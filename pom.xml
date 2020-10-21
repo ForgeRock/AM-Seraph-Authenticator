@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.forgerock.openam</groupId>
 	<artifactId>am-seraph-authenticator</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
 	<name>${project.artifactId}</name>
 	<description>ForgeRock AM authenticator for Atlassian JIRA and Confluence</description>
         <properties>

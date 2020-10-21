@@ -11,6 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.atlassian.confluence.user.ConfluenceAuthenticator;
 import com.atlassian.seraph.auth.AuthenticatorException;
+import com.atlassian.seraph.filter.BaseLoginFilter;
 import com.atlassian.seraph.util.RedirectUtils;
 
 /**
@@ -43,7 +44,9 @@ public class AMConfluenceAuthenticator extends ConfluenceAuthenticator {
     @Override
     public Principal getUserFromSession(HttpServletRequest request) {
         Principal p = super.getUserFromSession(request);
-        log.error("ForgeRock Session Authentication Failure");
+        if (log.isDebugEnabled()) {
+            log.debug("Authenticating with Session");
+        }
         return p;
     }
 
@@ -59,14 +62,12 @@ public class AMConfluenceAuthenticator extends ConfluenceAuthenticator {
     }
 
     @Override
-    public Principal getUser(HttpServletRequest request, HttpServletResponse response) {
-        return getUser1(request);
-
-    }
-
-    @Nullable
-    private Principal getUser1(HttpServletRequest request) {
+    public Principal getUser(HttpServletRequest request) {
         Principal user = null;
+
+        if (isAlreadyAuthenticated(request)) {
+            return getUserFromSession(request);
+        }
 
         try {
             request.getSession(true);
@@ -97,6 +98,18 @@ public class AMConfluenceAuthenticator extends ConfluenceAuthenticator {
             log.error("Exception when getting user", ex);
         }
         return user;
+    }
+
+    private boolean isAlreadyAuthenticated(HttpServletRequest request) {
+        Object osAuthStatus = request.getAttribute(BaseLoginFilter.OS_AUTHSTATUS_KEY);
+        if (null != osAuthStatus && BaseLoginFilter.LOGIN_SUCCESS.equals(osAuthStatus)) {
+            if (log.isDebugEnabled()) {
+                log.debug("User is authenticated via previous filter");
+            }
+            return true;
+        }
+
+        return false;
     }
 
     private Principal getUserAndSetSession(HttpServletRequest request, String username) {
