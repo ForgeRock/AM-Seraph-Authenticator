@@ -35,6 +35,7 @@ import org.h2.util.StringUtils;
 
 import com.atlassian.jira.security.login.JiraSeraphAuthenticator;
 import com.atlassian.seraph.auth.AuthenticatorException;
+import com.atlassian.seraph.filter.BaseLoginFilter;
 import com.atlassian.seraph.util.RedirectUtils;
 
 /**
@@ -65,7 +66,9 @@ public class AMJiraAuthenticator extends JiraSeraphAuthenticator {
     @Override
     public Principal getUserFromSession(HttpServletRequest request) {
         Principal p = super.getUserFromSession(request);
-        log.error("ForgeRock Session Authentication Failure");
+        if (log.isDebugEnabled()) {
+            log.debug("Authenticating with Session");
+        }
         return p;
     }
 
@@ -83,6 +86,10 @@ public class AMJiraAuthenticator extends JiraSeraphAuthenticator {
     @Override
     public Principal getUser(HttpServletRequest request, HttpServletResponse response) {
         Principal user = null;
+
+        if (isAlreadyAuthenticated(request)) {
+            return getUserFromSession(request);
+        }
 
         try {
             request.getSession(true);
@@ -114,6 +121,18 @@ public class AMJiraAuthenticator extends JiraSeraphAuthenticator {
         }
         return user;
 
+    }
+
+    private boolean isAlreadyAuthenticated(HttpServletRequest request) {
+        Object osAuthStatus = request.getAttribute(BaseLoginFilter.OS_AUTHSTATUS_KEY);
+        if (null != osAuthStatus && BaseLoginFilter.LOGIN_SUCCESS.equals(osAuthStatus)) {
+            if (log.isDebugEnabled()) {
+                log.debug("User is authenticated via previous filter");
+            }
+            return true;
+        }
+
+        return false;
     }
 
     private Principal getUserAndSetSession(HttpServletRequest request, String username) {
